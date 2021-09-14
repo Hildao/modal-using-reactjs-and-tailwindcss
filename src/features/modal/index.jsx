@@ -1,8 +1,18 @@
 import { useState } from 'react';
+// import Paragrapgh from '@/ui/paragraph';
+
+function isRequired(val) {
+  return val.length > 0 ? '' : 'Cannot be blank';
+}
 
 export default function Modal({ setOpen }) {
   const [email, setEmail] = useState('');
+  const [errors, setErrors] = useState([]);
   const [isFocused, setisFocused] = useState(false);
+
+  function validate(validations) {
+    setErrors(validations.map((errorsFor) => errorsFor(errors)));
+  }
 
   return (
     <div className='bg-gray-500 border-gray-600 rounded'>
@@ -21,6 +31,8 @@ export default function Modal({ setOpen }) {
           </div>
         </div>
         <div className='mb-4'>
+          {/* <Paragrapgh /> */}
+
           <p className='text-justify'>
             Get our monthly magazine for the latest Fashion must have
             collections to add to your wardrobe, health and beauty
@@ -29,17 +41,27 @@ export default function Modal({ setOpen }) {
         </div>
         <div>
           <input
-            type='text'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onFocus={() => setisFocused(true)}
-            onBlurr={() => setisFocused(false)}
-            placeholder='youremail@email.com'
             className={`border-2 rounded py-2 px-4 item center w-full mb-4 ${
               isFocused ? 'border-blue-400 text-pink-400' : ''
             }`}
+            type='text'
+            name='emailId'
+            placeholder='youremail@email.com'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onFocus={() => setisFocused(true)}
+            onBlurr={() => {
+              setisFocused(false);
+              validate([isRequired]);
+            }}
           />
         </div>
+        {errors.length > 0 ? (
+          <div className='mx-2 text-right text-red-400'>
+            {errors.join(', ')}
+          </div>
+        ) : null}
+
         <div className='mx-12'>
           <button
             disabled={!email}

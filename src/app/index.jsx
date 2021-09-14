@@ -13,7 +13,6 @@ export default function App() {
         Click me
       </button>
 
-      {/* Conditional rendering to say - if button open show modal and also click to close */}
       {open && <Modal setOpen={setOpen} />}
     </div>
   );
